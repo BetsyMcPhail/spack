@@ -7,15 +7,22 @@
 import os
 import stat
 
-import llnl.util.lock
-from llnl.util.lock import *  # noqa
+
+from sys import platform as _platform
+if _platform != "win32":
+    import llnl.util.lock as lock
+    from llnl.util.lock import *  # noqa
+else:
+    import llnl.util.win_lock as lock
+    from llnl.util.win_lock import *  # noqa
+
 
 import spack.config
 import spack.error
 import spack.paths
 
 
-class Lock(llnl.util.lock.Lock):
+class Lock(lock.Lock):
     """Lock that can be disabled.
 
     This overrides the ``_lock()`` and ``_unlock()`` methods from

@@ -6,11 +6,19 @@ import collections
 import errno
 import hashlib
 import glob
-import grp
+
+from sys import platform as _platform
+if _platform == "win32":
+    # grp and pwd are not avaible on Windows
+    grp = None
+    pwd = None
+else:
+    import grp
+    import pwd
+
 import itertools
 import numbers
 import os
-import pwd
 import re
 import shutil
 import stat
@@ -288,6 +296,10 @@ def group_ids(uid=None):
     Returns:
         (list of int): gids of groups the user is a member of
     """
+    if grp is None:
+        tty.warn("Function is not supported on Windows")
+        return []
+
     if uid is None:
         uid = os.getuid()
     user = pwd.getpwuid(uid).pw_name
@@ -296,6 +308,10 @@ def group_ids(uid=None):
 
 def chgrp(path, group):
     """Implement the bash chgrp function on a single path"""
+    if grp is None:
+        tty.warn("Function is not supported on Windows")
+        return
+
     if isinstance(group, six.string_types):
         gid = grp.getgrnam(group).gr_gid
     else:

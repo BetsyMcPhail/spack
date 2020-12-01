@@ -81,7 +81,7 @@ def make_log_context(log_events, width=None):
     indent = ' ' * (5 + num_width)
 
     if width is None:
-        _, width = tty.terminal_size()
+        _, width = shutil.get_terminal_size()
     if width <= 0:
         width = sys.maxsize
     wrap_width = width - num_width - 6

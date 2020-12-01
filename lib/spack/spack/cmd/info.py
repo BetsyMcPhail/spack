@@ -81,7 +81,7 @@ class VariantFormatter(object):
             )
 
         # Don't let name or possible values be less than max widths
-        _, cols = tty.terminal_size()
+        _, cols = shutil.get_terminal_size()
         max_name = min(self.column_widths[0], 30)
         max_vals = min(self.column_widths[1], 20)
 

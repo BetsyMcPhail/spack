@@ -9,10 +9,10 @@ Routines for printing columnar output.  See ``colify()`` for more information.
 from __future__ import division, unicode_literals
 
 import os
+import shutil
 import sys
 from six import StringIO, text_type
 
-from llnl.util.tty import terminal_size
 from llnl.util.tty.color import clen, cextra
 
 
@@ -158,7 +158,7 @@ def colify(elts, **options):
 
     # Specify the number of character columns to use.
     if not console_cols:
-        console_rows, console_cols = terminal_size()
+        console_rows, console_cols = shutil.get_terminal_size()
     elif type(console_cols) != int:
         raise ValueError("Number of columns must be an int")
     console_cols = max(1, console_cols - indent)

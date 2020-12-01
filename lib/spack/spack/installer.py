@@ -40,7 +40,12 @@ import time
 from collections import defaultdict
 
 import llnl.util.filesystem as fs
-import llnl.util.lock as lk
+from sys import platform as _platform
+if _platform != "win32":
+    import llnl.util.lock as lk
+else:
+    import llnl.util.win_lock as lk
+
 import llnl.util.tty as tty
 import spack.binary_distribution as binary_distribution
 import spack.compilers
