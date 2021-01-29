@@ -86,7 +86,7 @@ __UNABLE_TO_VERIFY_SSL = (
     ))(sys.version_info)
 
 
-def read_from_url(url, accept_content_type=None):
+def read_from_url(url, accept_content_type=None, range=None):
     url = url_util.parse(url)
     context = None
 
@@ -108,6 +108,8 @@ def read_from_url(url, accept_content_type=None):
             context = ssl._create_unverified_context()
 
     req = Request(url_util.format(url))
+    if range is not None:
+        req.add_header('Range', 'bytes=%s-%s' % (0, range))
     content_type = None
     is_web_url = url.scheme in ('http', 'https')
     if accept_content_type and is_web_url:
