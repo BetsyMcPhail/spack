@@ -13,6 +13,7 @@ import re
 
 from six import string_types
 import six.moves.urllib.parse as urllib_parse
+from six.moves.urllib.request import url2pathname
 
 import spack.util.path
 
@@ -69,6 +70,7 @@ def parse(url, scheme='file'):
     scheme = (scheme or 'file').lower()
 
     if scheme == 'file':
+        path = url2pathname(path)
         path = spack.util.path.canonicalize_path(netloc + path)
         path = re.sub(r'^/+', '/', path)
         netloc = ''
@@ -231,7 +233,7 @@ def _join(base_url, path, *extra, **kwargs):
         base_path_args = [new_base_path]
 
     base_path_args.extend(path_tokens)
-    base_path = os.path.relpath(os.path.join(*base_path_args), '/fake-root')
+    base_path = os.path.join(*base_path_args)
 
     if scheme == 's3':
         path_tokens = [

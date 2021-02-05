@@ -980,7 +980,7 @@ class Database(object):
                 self._write_to_file(f)
             # On Windows, os.rename will fail if the destination file
             # already exists
-            if _platform == "win32":
+            if sys.platform == "win32":
                 if os.path.exists(self._index_path):
                     os.remove(self._index_path)
             os.rename(temp_file, self._index_path)
