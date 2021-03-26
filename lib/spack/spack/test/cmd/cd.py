@@ -3,15 +3,10 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-from spack.main import SpackCommand
-
-
-cd = SpackCommand('cd')
-
-
-def test_cd():
+def test_cd(spack_command):
     """Sanity check the cd command to make sure it works."""
 
+    cd = spack_command("cd")
     out = cd()
 
     assert "To set up shell support" in out
