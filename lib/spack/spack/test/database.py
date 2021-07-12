@@ -11,6 +11,7 @@ import datetime
 import functools
 import json
 import os
+import sys
 
 import pytest
 
@@ -171,6 +172,8 @@ def test_add_to_upstream_after_downstream(upstream_and_downstream_db):
             spack.store.db = orig_db
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.usefixtures('config', 'temporary_store')
 def test_cannot_write_upstream(tmpdir_factory, gen_mock_layout):
     roots = [str(tmpdir_factory.mktemp(x)) for x in ['a', 'b']]
@@ -196,6 +199,8 @@ def test_cannot_write_upstream(tmpdir_factory, gen_mock_layout):
             upstream_dbs[0].add(spec, layouts[1])
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.usefixtures('config', 'temporary_store')
 def test_recursive_upstream_dbs(tmpdir_factory, gen_mock_layout):
     roots = [str(tmpdir_factory.mktemp(x)) for x in ['a', 'b', 'c']]
@@ -370,6 +375,8 @@ def _mock_remove(spec):
     spec.package.do_uninstall(spec)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_default_queries(database):
     # Testing a package whose name *doesn't* start with 'lib'
     # to ensure the library has 'lib' prepended to the name
@@ -410,6 +417,8 @@ def test_default_queries(database):
     assert os.path.exists(command.path)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_005_db_exists(database):
     """Make sure db cache file exists after creating."""
     index_file = os.path.join(database.root, '.spack-db', 'index.json')
@@ -422,6 +431,8 @@ def test_005_db_exists(database):
         validate(index_object, schema)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_010_all_install_sanity(database):
     """Ensure that the install layout reflects what we think it does."""
     all_specs = spack.store.layout.all_specs()
@@ -457,6 +468,8 @@ def test_010_all_install_sanity(database):
     ) == 1
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_015_write_and_read(mutable_database):
     # write and read DB
     with spack.store.db.write_transaction():
@@ -470,7 +483,8 @@ def test_015_write_and_read(mutable_database):
         assert new_rec.path == rec.path
         assert new_rec.installed == rec.installed
 
-
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_017_write_and_read_without_uuid(mutable_database, monkeypatch):
     monkeypatch.setattr(spack.database, '_use_uuid', False)
     # write and read DB
@@ -486,6 +500,8 @@ def test_017_write_and_read_without_uuid(mutable_database, monkeypatch):
         assert new_rec.installed == rec.installed
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_020_db_sanity(database):
     """Make sure query() returns what's actually in the db."""
     _check_db_sanity(database)
@@ -788,6 +804,8 @@ def test_failed_spec_path_error(database):
         spack.store.db._failed_spec_path(s)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.db
 def test_clear_failure_keep(mutable_database, monkeypatch, capfd):
     """Add test coverage for clear_failure operation when to be retained."""
@@ -803,6 +821,8 @@ def test_clear_failure_keep(mutable_database, monkeypatch, capfd):
     assert 'Retaining failure marking' in out
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.db
 def test_clear_failure_forced(mutable_database, monkeypatch, capfd):
     """Add test coverage for clear_failure operation when force."""
@@ -821,6 +841,8 @@ def test_clear_failure_forced(mutable_database, monkeypatch, capfd):
     assert 'Unable to remove failure marking' in out
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.db
 def test_mark_failed(mutable_database, monkeypatch, tmpdir, capsys):
     """Add coverage to mark_failed."""
@@ -842,6 +864,8 @@ def test_mark_failed(mutable_database, monkeypatch, tmpdir, capsys):
         del spack.store.db._prefix_failures[s.prefix]
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.db
 def test_prefix_failed(mutable_database, monkeypatch):
     """Add coverage to prefix_failed operation."""
@@ -866,6 +890,8 @@ def test_prefix_failed(mutable_database, monkeypatch):
     assert spack.store.db.prefix_failed(s)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_prefix_read_lock_error(mutable_database, monkeypatch):
     """Cover the prefix read lock exception."""
     def _raise(db, spec):
@@ -881,6 +907,8 @@ def test_prefix_read_lock_error(mutable_database, monkeypatch):
             assert False
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_prefix_write_lock_error(mutable_database, monkeypatch):
     """Cover the prefix write lock exception."""
     def _raise(db, spec):

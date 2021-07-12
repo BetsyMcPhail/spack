@@ -6,6 +6,7 @@
 import collections
 import filecmp
 import os
+import sys
 
 import pytest
 
@@ -168,6 +169,8 @@ def test_nested_directives(mock_packages):
     assert len(fake_dep.patches[Spec()]) == 2
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_patched_dependency(
         mock_packages, config, install_mockery, mock_fetch):
     """Test whether patched dependencies work."""

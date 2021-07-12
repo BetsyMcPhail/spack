@@ -5,6 +5,7 @@
 
 import glob
 import os
+import sys
 
 import pytest
 
@@ -37,6 +38,8 @@ def test_affirmative_make_check(directory, config, mock_packages, working_env):
         pkg._if_make_target_execute('check')
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.parametrize(
     'directory',
     glob.iglob(os.path.join(DATA_PATH, 'make', 'negative', '*'))
@@ -103,6 +106,8 @@ def test_negative_ninja_check(directory, config, mock_packages, working_env):
         pkg._if_ninja_target_execute('check')
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_cmake_std_args(config, mock_packages):
     # Call the function on a CMakePackage instance
     s = Spec('cmake-client')
@@ -117,6 +122,8 @@ def test_cmake_std_args(config, mock_packages):
     assert get_std_cmake_args(pkg)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_cmake_bad_generator(config, mock_packages):
     s = Spec('cmake-client')
     s.concretize()
@@ -126,6 +133,8 @@ def test_cmake_bad_generator(config, mock_packages):
         get_std_cmake_args(pkg)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_cmake_secondary_generator(config, mock_packages):
     s = Spec('cmake-client')
     s.concretize()
@@ -183,6 +192,8 @@ class TestAutotoolsPackage(object):
         assert '--without-baz' in options
         assert '--no-fee' in options
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_libtool_archive_files_are_deleted_by_default(
             self, mutable_database
     ):
@@ -200,6 +211,8 @@ class TestAutotoolsPackage(object):
         )
         assert libtool_deletion_log
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_libtool_archive_files_might_be_installed_on_demand(
             self, mutable_database, monkeypatch
     ):
@@ -217,6 +230,8 @@ class TestAutotoolsPackage(object):
 @pytest.mark.usefixtures('config', 'mock_packages')
 class TestCMakePackage(object):
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_define(self):
         s = Spec('cmake-client')
         s.concretize()
@@ -234,6 +249,8 @@ class TestCMakePackage(object):
         arg = pkg.define('SINGLE', 'red')
         assert arg == '-DSINGLE:STRING=red'
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_define_from_variant(self):
         s = Spec('cmake-client multi=up,right ~truthy single=red')
         s.concretize()

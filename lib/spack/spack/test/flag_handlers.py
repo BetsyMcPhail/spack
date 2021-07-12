@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 import os
+import sys
 
 import pytest
 
@@ -30,6 +31,8 @@ def add_o3_to_build_system_cflags(pkg, name, flags):
 
 @pytest.mark.usefixtures('config', 'mock_packages')
 class TestFlagHandlers(object):
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_no_build_system_flags(self, temp_env):
         # Test that both autotools and cmake work getting no build_system flags
         s1 = spack.spec.Spec('cmake-client')
@@ -77,6 +80,8 @@ class TestFlagHandlers(object):
         assert os.environ['CPPFLAGS'] == '-g'
         assert 'SPACK_CPPFLAGS' not in os.environ
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_build_system_flags_cmake(self, temp_env):
         s = spack.spec.Spec('cmake-client cppflags=-g')
         s.concretize()
@@ -128,6 +133,8 @@ class TestFlagHandlers(object):
 
         assert pkg.configure_flag_args == ['CFLAGS=-O3']
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_add_build_system_flags_cmake(self, temp_env):
         s = spack.spec.Spec('cmake-client cppflags=-g')
         s.concretize()
@@ -140,6 +147,8 @@ class TestFlagHandlers(object):
 
         assert pkg.cmake_flag_args == ['-DCMAKE_C_FLAGS=-O3']
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_ld_flags_cmake(self, temp_env):
         s = spack.spec.Spec('cmake-client ldflags=-mthreads')
         s.concretize()
@@ -156,6 +165,8 @@ class TestFlagHandlers(object):
                         '-DCMAKE_STATIC_LINKER_FLAGS=-mthreads'])
         assert set(pkg.cmake_flag_args) == expected
 
+    @pytest.mark.skipif(sys.platform == 'win32',
+                        reason="Not supported on Windows (yet)")
     def test_ld_libs_cmake(self, temp_env):
         s = spack.spec.Spec('cmake-client ldlibs=-lfoo')
         s.concretize()

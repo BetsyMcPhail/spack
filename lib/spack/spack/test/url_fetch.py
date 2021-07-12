@@ -73,6 +73,8 @@ def test_urlfetchstrategy_bad_url(tmpdir, use_curl):
                 fetcher.fetch()
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 def test_fetch_options(tmpdir, mock_archive):
     testpath = str(tmpdir)
     with spack.config.override('config:use_curl', True):
@@ -87,6 +89,8 @@ def test_fetch_options(tmpdir, mock_archive):
             fetcher.fetch()
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.parametrize('use_curl', [True, False])
 def test_archive_file_errors(tmpdir, mock_archive, use_curl):
     """Ensure FetchStrategy commands may only be used as intended"""
@@ -229,6 +233,8 @@ def test_unknown_hash(checksum_type):
         crypto.Checker('a')
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.skipif(which('curl') is None,
                     reason='Urllib does not have built-in status bar')
 def test_url_with_status_bar(tmpdir, mock_archive, monkeypatch, capfd):
@@ -250,6 +256,8 @@ def test_url_with_status_bar(tmpdir, mock_archive, monkeypatch, capfd):
         assert '##### 100' in status
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="Not supported on Windows (yet)")
 @pytest.mark.parametrize('use_curl', [True, False])
 def test_url_extra_fetch(tmpdir, mock_archive, use_curl):
     """Ensure a fetch after downloading is effectively a no-op."""
